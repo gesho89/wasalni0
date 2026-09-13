@@ -2,94 +2,65 @@
 
 import { useRouter } from 'next/navigation'
 import { useApp } from '@/lib/context/AppContext'
-import { Car, Package, Bike } from 'lucide-react'
+import { ArrowLeft, Bell, CarFront, ChevronLeft, MapPin, Menu, ShieldCheck, WalletCards, Wrench } from 'lucide-react'
+
+const roles = [
+  { label: 'راكب', english: 'Passenger', icon: CarFront, description: 'اطلب تك توك بأمان', tone: 'gold' },
+  { label: 'سائق', english: 'Driver', icon: Wrench, description: 'ابدأ مشاويرك واربح', tone: 'dark' },
+  { label: 'متجر', english: 'Shop Owner', icon: WalletCards, description: 'وصّل طلبات متجرك', tone: 'dark' },
+]
 
 export default function Page() {
   const router = useRouter()
   const { loginAsPassenger, loginAsDriver, loginAsAdmin } = useApp()
 
   return (
-    <main className="relative min-h-screen bg-gradient-to-br from-blue-900 to-blue-700 text-white">
-      {/* Background pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full mix-blend-multiply filter blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-yellow-400 rounded-full mix-blend-multiply filter blur-3xl"></div>
-      </div>
+    <main className="min-h-screen overflow-hidden bg-[#080a0b] text-white">
+      <div className="tuktuky-shell relative min-h-screen">
+        <div className="gold-dust absolute inset-0" aria-hidden="true" />
+        <header className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-5 sm:px-8 lg:px-12">
+          <button aria-label="فتح القائمة" className="icon-button"><Menu size={22} /></button>
+          <div className="brand-lockup">
+            <div className="brand-mark"><CarFront size={25} strokeWidth={2.4} /></div>
+            <div><div className="brand-ar">تك توكي</div><div className="brand-en">TukTuky</div></div>
+          </div>
+          <button aria-label="الإشعارات" className="icon-button relative"><Bell size={21} /><span className="notification-dot">3</span></button>
+        </header>
 
-      <div className="relative flex min-h-screen items-center justify-center px-4">
-        <div className="max-w-2xl w-full">
-          {/* Logo and Title */}
-          <div className="text-center mb-12">
-            <div className="flex items-center justify-center mb-4">
-              <div className="w-20 h-20 bg-yellow-400 rounded-full flex items-center justify-center">
-                <Car className="w-12 h-12 text-blue-900" />
-              </div>
+        <section className="relative z-10 mx-auto grid min-h-[calc(100vh-88px)] w-full max-w-7xl items-center gap-10 px-5 pb-10 pt-4 sm:px-8 lg:grid-cols-[1.05fr_.95fr] lg:px-12 lg:pt-0" dir="rtl">
+          <div className="order-2 lg:order-1">
+            <div className="eyebrow"><span /> تجربة تك توكي <span /></div>
+            <h1 className="hero-title">رحلتك أسهل،<br /><strong>أسرع وأكثر أمانًا.</strong></h1>
+            <p className="hero-copy">اطلب تك توكك في ثواني، وتابع رحلتك لحظة بلحظة مع تجربة مصممة لك.</p>
+            <div className="hero-actions">
+              <button onClick={() => { loginAsPassenger('p1'); router.push('/passenger') }} className="primary-cta">اطلب تك توك الآن <ArrowLeft size={19} /></button>
+              <button onClick={() => router.push('/passenger')} className="secondary-cta">تسجيل الدخول <ChevronLeft size={17} /></button>
             </div>
-            <h1 className="text-5xl font-bold mb-2">وصلني</h1>
-            <p className="text-xl text-blue-100">خدمة نقل آمنة وموثوقة</p>
+            <div className="trust-row"><ShieldCheck size={17} /><span>سائقون موثوقون</span><span className="trust-divider" /><MapPin size={17} /><span>متاح في كل مكان</span></div>
           </div>
 
-          {/* Role Selection */}
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-12 border border-white/20">
-            <h2 className="text-2xl font-bold mb-8 text-center">اختر دورك</h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              {/* Passenger Option */}
-              <button
-                onClick={() => {
-                  loginAsPassenger('p1')
-                  router.push('/passenger')
-                }}
-                className="flex flex-col items-center gap-4 p-6 bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 border border-white/20 hover:border-white/40"
-              >
-                <Car className="w-12 h-12 text-yellow-400" />
-                <span className="font-semibold text-lg">الراكب</span>
-                <span className="text-sm text-blue-100">ابحث عن رحلة</span>
-              </button>
-
-              {/* Driver Option */}
-              <button
-                onClick={() => {
-                  loginAsDriver('d1')
-                  router.push('/driver')
-                }}
-                className="flex flex-col items-center gap-4 p-6 bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 border border-white/20 hover:border-white/40"
-              >
-                <Package className="w-12 h-12 text-yellow-400" />
-                <span className="font-semibold text-lg">السائق</span>
-                <span className="text-sm text-blue-100">قبل الطلبات</span>
-              </button>
-
-              {/* Admin Option */}
-              <button
-                onClick={() => {
-                  loginAsAdmin()
-                  router.push('/admin')
-                }}
-                className="flex flex-col items-center gap-4 p-6 bg-white/10 hover:bg-white/20 rounded-xl transition-all duration-300 border border-white/20 hover:border-white/40"
-              >
-                <Bike className="w-12 h-12 text-yellow-400" />
-                <span className="font-semibold text-lg">الإدارة</span>
-                <span className="text-sm text-blue-100">لوحة التحكم</span>
-              </button>
-            </div>
-
-            {/* Test Accounts Info */}
-            <div className="bg-white/5 rounded-lg p-6 border border-white/10">
-              <p className="text-sm text-blue-100 mb-4">حسابات اختبار متاحة:</p>
-              <div className="space-y-2 text-sm text-blue-100">
-                <p>• الراكب: أحمد محمد (p1) - راكب نشط</p>
-                <p>• السائق: محمود السيد (d1) - سائق موثوق</p>
-                <p>• الإدارة: لوحة التحكم الإدارية</p>
-              </div>
+          <div className="order-1 flex items-center justify-center lg:order-2">
+            <div className="hero-visual">
+              <div className="city-glow" />
+              <div className="route-line route-one" /><div className="route-line route-two" />
+              <div className="hero-tuk"><div className="tuk-roof" /><div className="tuk-cabin"><span /><span /></div><div className="tuk-wheel wheel-left" /><div className="tuk-wheel wheel-right" /><div className="tuk-lamp" /></div>
+              <div className="floating-card floating-card-top"><span className="status-pulse" /> السائقون متاحون الآن</div>
+              <div className="floating-card floating-card-bottom"><MapPin size={15} /> رحلتك تبدأ من هنا</div>
             </div>
           </div>
+        </section>
 
-          {/* Footer */}
-          <div className="text-center mt-8 text-blue-100">
-            <p className="text-sm">تطبيق وصلني - منصة توصيل وخدمات النقل</p>
+        <section className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-10 sm:px-8 lg:px-12">
+          <div className="section-heading"><div><span className="section-kicker">كل ما تحتاجه</span><h2>خدماتك في مكان واحد</h2></div><span className="section-line" /></div>
+          <div className="service-grid">
+            <button onClick={() => { loginAsPassenger('p1'); router.push('/passenger') }} className="service-card service-card-featured"><CarFront size={27} /><span>طلب تك توك</span><small>Request TukTuky</small></button>
+            <button onClick={() => router.push('/passenger')} className="service-card"><MapPin size={27} /><span>الخريطة</span><small>Map</small></button>
+            <button onClick={() => router.push('/passenger/rides')} className="service-card"><WalletCards size={27} /><span>رحلاتي</span><small>My Rides</small></button>
+            <button onClick={() => router.push('/admin')} className="service-card"><ShieldCheck size={27} /><span>الأمان والدعم</span><small>Safety & Support</small></button>
           </div>
-        </div>
+          <div className="roles-strip"><div><span className="section-kicker">انضم إلى مجتمعنا</span><h2>اختر تجربتك</h2></div><div className="roles-grid">{roles.map(({ label, english, icon: Icon, description, tone }) => <button key={label} onClick={() => { if (label === 'راكب') { loginAsPassenger('p1'); router.push('/passenger') } else if (label === 'سائق') { loginAsDriver('d1'); router.push('/driver') } else router.push('/admin') }} className={`role-card role-${tone}`}><Icon size={20} /><strong>{label}</strong><small>{english}</small><em>{description}</em></button>)}</div></div>
+          <p className="footer-note">تك توكي — أقرب لك دائمًا</p>
+        </section>
       </div>
     </main>
   )

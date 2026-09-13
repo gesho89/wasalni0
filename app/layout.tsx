@@ -9,14 +9,16 @@ const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin']
 const arabicFont = Noto_Sans_Arabic({ variable: '--font-arabic', subsets: ['arabic'] })
 
 export const metadata: Metadata = {
-  title: 'وصلني | نقل آمن وموثوق',
-  description: 'منصة وصلني لطلب الرحلات والتوصيل وإدارة السائقين',
+  title: 'تك توكي | رحلتك أسهل وأسرع وأكثر أمانًا',
+  description: 'تك توكي — منصة التنقل الذكية لطلب التوك توك ومتابعة رحلتك بأمان.',
   generator: 'v0.app',
 }
 
 export const viewport: Viewport = {
-  colorScheme: 'light',
-  themeColor: '#0b2553',
+  colorScheme: 'dark',
+  themeColor: '#080a0b',
+  width: 'device-width',
+  initialScale: 1,
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -29,4 +31,3 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     </html>
   )
 }
-
