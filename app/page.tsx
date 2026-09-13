@@ -33,8 +33,8 @@ export default function Page() {
             <h1 className="hero-title">رحلتك أسهل،<br /><strong>أسرع وأكثر أمانًا.</strong></h1>
             <p className="hero-copy">اطلب تك توكك في ثواني، وتابع رحلتك لحظة بلحظة مع تجربة مصممة لك.</p>
             <div className="hero-actions">
-              <button onClick={() => { loginAsPassenger('p1'); router.push('/passenger') }} className="primary-cta">اطلب تك توك الآن <ArrowLeft size={19} /></button>
-              <button onClick={() => router.push('/passenger')} className="secondary-cta">تسجيل الدخول <ChevronLeft size={17} /></button>
+              <button onClick={() => router.push('/auth/register')} className="primary-cta">ابدأ رحلتك الآن <ArrowLeft size={19} /></button>
+              <button onClick={() => router.push('/auth/login')} className="secondary-cta">تسجيل الدخول <ChevronLeft size={17} /></button>
             </div>
             <div className="trust-row"><ShieldCheck size={17} /><span>سائقون موثوقون</span><span className="trust-divider" /><MapPin size={17} /><span>متاح في كل مكان</span></div>
           </div>
@@ -53,7 +53,7 @@ export default function Page() {
         <section className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-10 sm:px-8 lg:px-12">
           <div className="section-heading"><div><span className="section-kicker">كل ما تحتاجه</span><h2>خدماتك في مكان واحد</h2></div><span className="section-line" /></div>
           <div className="service-grid">
-            <button onClick={() => { loginAsPassenger('p1'); router.push('/passenger') }} className="service-card service-card-featured"><CarFront size={27} /><span>طلب تك توك</span><small>Request TukTuky</small></button>
+            <button onClick={() => router.push('/auth/register')} className="service-card service-card-featured"><CarFront size={27} /><span>طلب تك توك</span><small>Request TukTuky</small></button>
             <button onClick={() => router.push('/passenger')} className="service-card"><MapPin size={27} /><span>الخريطة</span><small>Map</small></button>
             <button onClick={() => router.push('/passenger/rides')} className="service-card"><WalletCards size={27} /><span>رحلاتي</span><small>My Rides</small></button>
             <button onClick={() => router.push('/admin')} className="service-card"><ShieldCheck size={27} /><span>الأمان والدعم</span><small>Safety & Support</small></button>
