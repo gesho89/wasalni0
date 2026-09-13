@@ -1,23 +1,12 @@
 'use client'
 
+import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowRight, Car, Clock3, MapPin, Star } from 'lucide-react'
-import { mockRides, mockDrivers } from '@/lib/mockData'
+import { ArrowRight, CarFront, CheckCircle2, Clock3, MapPin, RotateCcw, Star, XCircle } from 'lucide-react'
+import { mockDrivers, mockRides } from '@/lib/mockData'
 
 export default function PassengerRidesPage() {
-  const router = useRouter()
-  const rides = mockRides.filter((ride) => ride.passengerId === 'p1')
-
-  return (
-    <main className="min-h-screen bg-background">
-      <header className="flex h-20 items-center gap-4 border-b bg-card px-5 lg:px-10">
-        <button aria-label="العودة" onClick={() => router.push('/passenger')} className="rounded-lg p-2 hover:bg-secondary"><ArrowRight size={20} /></button>
-        <div><p className="font-bold text-xl text-primary">رحلاتي</p><p className="text-xs text-muted-foreground">سجل الرحلات السابقة والقادمة</p></div>
-      </header>
-      <section className="mx-auto max-w-3xl p-5 lg:p-10">
-        <div className="mb-6"><h1 className="text-3xl font-bold">سجل الرحلات</h1><p className="mt-2 text-muted-foreground">راجع تفاصيل رحلاتك وتقييماتك.</p></div>
-        <div className="space-y-4">{rides.map((ride) => { const driver = mockDrivers.find((item) => item.id === ride.driverId); return <article key={ride.id} className="rounded-2xl border bg-card p-5 shadow-sm"><div className="flex items-start justify-between gap-4"><div className="flex items-center gap-3"><div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-primary"><Car size={22} /></div><div><h2 className="font-bold">رحلة مع {driver?.name ?? 'سائق وصلني'}</h2><p className="mt-1 text-sm text-muted-foreground">{ride.serviceType}</p></div></div><span className="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">مكتملة</span></div><div className="mt-5 grid gap-3 border-t pt-4 text-sm text-muted-foreground sm:grid-cols-3"><span className="flex items-center gap-2"><Clock3 size={16} />{ride.requestedAt}</span><span className="flex items-center gap-2"><MapPin size={16} />{ride.distance} كم</span><span className="flex items-center gap-2 text-yellow-600"><Star size={16} fill="currentColor" />{ride.rating?.rating ?? '—'} / 5</span></div><div className="mt-4 flex justify-between text-sm"><span className="text-muted-foreground">التكلفة النهائية</span><strong>{ride.actualFare} ر.س</strong></div></article> })}</div>
-      </section>
-    </main>
-  )
+  const router = useRouter(); const [tab, setTab] = useState<'all'|'completed'|'cancelled'>('all')
+  const rides = useMemo(() => mockRides.filter((ride) => ride.passengerId === 'p1' && (tab === 'all' || (tab === 'completed' && ride.status === 'completed') || (tab === 'cancelled' && ride.status === 'cancelled'))), [tab])
+  return <main className="passenger-app"><header className="passenger-header"><button aria-label="العودة" onClick={() => router.push('/passenger')} className="icon-button"><ArrowRight size={19}/></button><div className="brand-lockup"><div className="brand-mark"><CarFront size={22}/></div><div><strong>تك توكي</strong><small>TUKTUKY</small></div></div><div className="passenger-actions"><span className="rides-header-title">رحلاتي</span></div></header><section className="rides-page"><div className="page-intro"><div><span className="panel-eyebrow">سجل رحلاتك</span><h1>رحلاتي</h1><p>تابع رحلاتك السابقة وأعد طلب وجهاتك المفضلة.</p></div><div className="ride-count"><b>{rides.length}</b><span>رحلات</span></div></div><div className="ride-tabs">{([['all','الكل'],['completed','المكتملة'],['cancelled','الملغاة']] as const).map(([value,label]) => <button key={value} onClick={() => setTab(value)} className={tab === value ? 'active' : ''}>{label}</button>)}</div>{rides.length ? <div className="rides-list">{rides.map((ride) => { const driver = mockDrivers.find((item) => item.id === ride.driverId); return <article key={ride.id} className="ride-history-card"><div className="ride-card-top"><div className="ride-service-icon"><CarFront size={22}/></div><div className="ride-card-heading"><b>{ride.serviceType === 'ride' ? 'تك توك عادي' : ride.serviceType}</b><small>مع {driver?.name ?? 'سائق تك توكي'}</small></div><span className="status-pill"><CheckCircle2 size={13}/>مكتملة</span></div><div className="ride-route"><div><i className="route-point pickup"/><span>{ride.pickup.name}</span></div><div className="route-line"/><div><i className="route-point dropoff"/><span>{ride.dropoff.name}</span></div></div><div className="ride-meta"><span><Clock3 size={14}/>{ride.requestedAt ?? 'اليوم، 10:30 ص'}</span><span><MapPin size={14}/>{ride.distance} كم</span><span className="rating"><Star size={14} fill="currentColor"/>{ride.rating?.rating ?? '—'}</span></div><div className="ride-card-footer"><strong>{ride.actualFare} ج.م</strong><div><button onClick={() => router.push('/passenger/ride-details')} className="outline-action">التفاصيل</button><button className="gold-action"><RotateCcw size={14}/>إعادة الطلب</button></div></div></article>})}</div> : <div className="empty-rides"><XCircle size={34}/><b>لا توجد رحلات هنا</b><span>ستظهر رحلاتك في هذا القسم بعد طلبها.</span></div>}</section><footer className="passenger-bottom-nav"><button onClick={() => router.push('/passenger')}><CarFront size={19}/>الرئيسية</button><button className="active"><Clock3 size={19}/>رحلاتي</button><button onClick={() => router.push('/passenger')} className="center-action"><CarFront size={24}/>اطلب الآن</button><button><span>▣</span>المحفظة</button><button><span>♙</span>حسابي</button></footer></main>
 }
