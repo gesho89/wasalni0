@@ -18,10 +18,12 @@ export default function WalletPage() {
   const [couponApplied, setCouponApplied] = useState(false)
   const [message, setMessage] = useState('')
 
-  function addFunds(amount: number) {
-    setBalance((value) => value + amount)
-    setMessage(`تمت إضافة ${amount.toFixed(2)} ج.م إلى محفظتك`)
-    setTimeout(() => setMessage(''), 3000)
+  async function startCheckout(amount: number) {
+    setMessage('جار تجهيز الدفع الآمن...')
+    const response = await fetch('/api/checkout', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ amount }) })
+    const result = await response.json()
+    if (!response.ok || !result.url) { setMessage('سجّل الدخول أولًا لبدء الدفع'); return }
+    window.location.href = result.url
   }
 
   return <main className="passenger-app">
@@ -30,8 +32,8 @@ export default function WalletPage() {
       <div className="page-intro"><div><div className="panel-eyebrow">حسابك المالي</div><h1>المحفظة</h1><p>تحكم في رصيدك وطرق الدفع بسهولة وأمان</p></div><div className="wallet-mark"><WalletCards size={25}/></div></div>
       {message && <div className="wallet-toast"><Check size={17}/>{message}</div>}
       <div className="wallet-grid">
-        <section className="balance-card"><div><span>الرصيد الحالي</span><strong>{balance.toFixed(2)}</strong><small>جنيه مصري</small></div><WalletCards size={39}/><div className="balance-actions"><button onClick={() => addFunds(50)}>+ 50 ج.م</button><button onClick={() => addFunds(100)}>+ 100 ج.م</button><button onClick={() => addFunds(250)}>+ 250 ج.م</button></div></section>
-        <section className="wallet-card"><div className="section-heading"><div><b>شحن المحفظة</b><small>اختر المبلغ المناسب لك</small></div><Plus size={19}/></div><div className="amount-grid">{[50,100,250,500].map((amount) => <button key={amount} onClick={() => addFunds(amount)}>{amount} <small>ج.م</small></button>)}</div><div className="custom-amount"><input value={topUp} onChange={(e) => setTopUp(e.target.value.replace(/[^0-9]/g, ''))} inputMode="numeric" placeholder="مبلغ مخصص"/><button disabled={!topUp} onClick={() => { addFunds(Number(topUp)); setTopUp('') }}>شحن الآن</button></div></section>
+        <section className="balance-card"><div><span>الرصيد الحالي</span><strong>{balance.toFixed(2)}</strong><small>جنيه مصري</small></div><WalletCards size={39}/><div className="balance-actions"><button onClick={() => startCheckout(50)}>+ 50 ج.م</button><button onClick={() => startCheckout(100)}>+ 100 ج.م</button><button onClick={() => startCheckout(250)}>+ 250 ج.م</button></div></section>
+        <section className="wallet-card"><div className="section-heading"><div><b>شحن المحفظة</b><small>اختر المبلغ المناسب لك</small></div><Plus size={19}/></div><div className="amount-grid">{[50,100,250,500].map((amount) => <button key={amount} onClick={() => startCheckout(amount)}>{amount} <small>ج.م</small></button>)}</div><div className="custom-amount"><input value={topUp} onChange={(e) => setTopUp(e.target.value.replace(/[^0-9]/g, ''))} inputMode="numeric" placeholder="مبلغ مخصص"/><button disabled={!topUp} onClick={() => { startCheckout(Number(topUp)); setTopUp('') }}>شحن الآن</button></div></section>
       </div>
       <div className="wallet-grid lower-grid">
         <section className="wallet-card"><div className="section-heading"><div><b>طرق الدفع</b><small>اختر طريقة الدفع الافتراضية</small></div><CreditCard size={19}/></div><button className="payment-method active"><span className="card-icon">VISA</span><span><b>بطاقة بنكية</b><small>تنتهي بـ 4242</small></span><Check size={17}/></button><button className="payment-method"><span className="cash-icon">ج.م</span><span><b>الدفع نقدًا</b><small>ادفع للسائق مباشرة</small></span></button><button className="add-payment"><Plus size={16}/>إضافة طريقة دفع</button></section>
