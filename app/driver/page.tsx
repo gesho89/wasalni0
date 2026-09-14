@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Bell, CarFront, Check, CircleDollarSign, Clock3, MapPin, Navigation, Phone, Star, ToggleRight, TrendingUp, X } from 'lucide-react'
 import { mockDrivers, mockPassengers } from '@/lib/mockData'
 
@@ -10,6 +11,7 @@ const Map = dynamic(() => import('@/components/Map/LeafletMap').then((m) => m.Le
 type RideStage = 'request' | 'accepted' | 'started' | 'completed'
 
 export default function DriverPage() {
+  const router = useRouter()
   const [online, setOnline] = useState(true)
   const [stage, setStage] = useState<RideStage>('request')
   const driver = mockDrivers[0]
@@ -28,7 +30,7 @@ export default function DriverPage() {
   ], [stage])
 
   return <main className="driver-app" dir="rtl">
-    <header className="driver-header"><div className="driver-brand"><span><CarFront size={21} /></span><div><strong>تك توكي</strong><small>لوحة السائق</small></div></div><div className="driver-header-actions"><button className="driver-icon-button" aria-label="الإشعارات"><Bell size={19} /><i>3</i></button><div className="driver-avatar"><img src={driver.avatar} alt={driver.name} /><span>{driver.name}</span></div></div></header>
+    <header className="driver-header"><div className="driver-brand"><span><CarFront size={21} /></span><div><strong>تك توكي</strong><small>لوحة السائق</small></div></div><div className="driver-header-actions"><button className="driver-icon-button" aria-label="الإشعارات" onClick={() => router.push('/notifications')}><Bell size={19} /><i>3</i></button><div className="driver-avatar"><img src={driver.avatar} alt={driver.name} /><span>{driver.name}</span></div></div></header>
     <div className="driver-container"><div className="driver-welcome"><div><p>الأربعاء، 03 سبتمبر 2026</p><h1>مرحباً، {driver.name.split(' ')[0]}</h1><span>جاهز لرحلتك التالية؟</span></div><button className={`driver-status ${online ? 'is-online' : ''}`} onClick={() => setOnline(!online)}><span />{online ? 'أنت متصل الآن' : 'أنت غير متصل'}<ToggleRight size={22} /></button></div>
       <section className="driver-stat-grid">{stats.map(({ label, value, icon: Icon, tone }) => <article className="driver-stat" key={label}><Icon className={`tone-${tone}`} size={21} /><small>{label}</small><strong>{value}</strong></article>)}</section>
       <div className="driver-layout"><section className="driver-map-card"><div className="driver-card-heading"><div><h2>منطقة العمل</h2><p>موقعك والطلبات القريبة</p></div><span className="driver-live"><b /> مباشر</span></div><div className="driver-map"><Map center={driver.currentLocation} drivers={online ? mockDrivers : []} /></div><div className="driver-map-footer"><span><MapPin size={16} /> حي النخيل، الرياض</span><span>3 طلبات قريبة</span></div></section>
